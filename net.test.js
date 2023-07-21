@@ -19,6 +19,8 @@ describe("qamid.tmweb.ru tests", () => {
   });
 
   test("The first test one ticket'", async () => {
+    pageNavigation = await browser.newPage();
+    await pageNavigation.goto("http://qamid.tmweb.ru/client/index.php");
     const linkNavigation = await pageNavigation.$("body > nav > a.page-nav__day.page-nav__day_weekend.page-nav__day_chosen");
     await linkNavigation.click();
     await page.waitForSelector("a");
@@ -40,6 +42,8 @@ describe("qamid.tmweb.ru tests", () => {
   });
 
   test("The second test two tickets'", async () => {
+    pageNavigation = await browser.newPage();
+    await pageNavigation.goto("http://qamid.tmweb.ru/client/index.php");
     const linkNavigation = await pageNavigation.$("body > nav > a.page-nav__day.page-nav__day_weekend.page-nav__day_chosen");
     await linkNavigation.click();
     await page.waitForSelector("a");
@@ -64,6 +68,8 @@ describe("qamid.tmweb.ru tests", () => {
   });
 
   test("The third test no tickets'", async () => {
+    pageNavigation = await browser.newPage();
+    await pageNavigation.goto("http://qamid.tmweb.ru/client/index.php");
     const linkNavigation = await pageNavigation.$("body > nav > a.page-nav__day.page-nav__day_weekend.page-nav__day_chosen");
     await linkNavigation.click();
     await page.waitForSelector("a");
