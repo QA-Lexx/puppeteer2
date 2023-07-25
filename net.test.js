@@ -1,3 +1,4 @@
+const { expect } = require("chai");
 const { clickElement, putText, getText } = require("./lib/commands.js");
 const { generateName } = require("./lib/util.js");
 
@@ -19,75 +20,49 @@ describe("qamid.tmweb.ru tests", () => {
   });
 
   test("The first test one ticket'", async () => {
-    pageNavigation = await browser.newPage();
-    await pageNavigation.goto("http://qamid.tmweb.ru/client/index.php");
-    const linkNavigation = await pageNavigation.$("body > nav > a.page-nav__day.page-nav__day_weekend.page-nav__day_chosen");
-    await linkNavigation.click();
-    await page.waitForSelector("a");
-    const linkMovie = await pageMovie.$("body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
-    await linkMovie.click();
-    await page.waitForSelector("a");
+    await clickElement(page, "body > nav > a:nth-child(3)");
+    await clickElement(page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/hall.php");
-    const linkChair = await linkChair.$("body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
-    await linkChair.click();
-    await page.waitForSelector("span");
-    const linkBook = await linkBook.$("body > main > section > button");
-    await linkBook.click();
-    await page.waitForSelector("button");
+    await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
+    await clickElement(page, "body > main > section > button");
+    const actual = await getText(page, "body > main > section > button");
+    await expect(actual).toContain("Забронировать");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/payment.php");
-    const titleBook = await page.title();
+    const titleBook = await getText(page, "body > main > section > header > h2");
     expect(titleBook).toEqual("Вы выбрали билеты:");
-  });
+  }, 60000);
 
   test("The second test two tickets'", async () => {
-    pageNavigation = await browser.newPage();
-    await pageNavigation.goto("http://qamid.tmweb.ru/client/index.php");
-    const linkNavigation = await pageNavigation.$("body > nav > a.page-nav__day.page-nav__day_weekend.page-nav__day_chosen");
-    await linkNavigation.click();
-    await page.waitForSelector("a");
-    const linkMovie = await pageMovie.$("body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
-    await linkMovie.click();
-    await page.waitForSelector("a");
+    await clickElement(page, "body > nav > a:nth-child(3)");
+    await clickElement(page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/hall.php");
-    const linkChairOne = await linkChairOne.$("body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
-    await linkChairOne.click();
-    await page.waitForSelector("span");
-    const linkChairTwo = await linkChairTwo.$("body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(6)");
-    await linkChairTwo.click();
-    await page.waitForSelector("span");
-    const linkBook = await linkBook.$("body > main > section > button");
-    await linkBook.click();
-    await page.waitForSelector("button");
+    await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
+    await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(6)");
+    await clickElement(page, "body > main > section > button");
+    const actual = await getText(page, "body > main > section > button");
+    await expect(actual).toContain("Забронировать");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/payment.php");
-    const titleBook = await page.title();
+    const titleBook = await getText(page, "body > main > section > header > h2");
     expect(titleBook).toEqual("Вы выбрали билеты:");
-  });
+  }, 60000);
 
   test("The third test no tickets'", async () => {
-    pageNavigation = await browser.newPage();
-    await pageNavigation.goto("http://qamid.tmweb.ru/client/index.php");
-    const linkNavigation = await pageNavigation.$("body > nav > a.page-nav__day.page-nav__day_weekend.page-nav__day_chosen");
-    await linkNavigation.click();
-    await page.waitForSelector("a");
-    const linkMovie = await pageMovie.$("body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
-    await linkMovie.click();
-    await page.waitForSelector("a");
+    await clickElement(page, "body > nav > a:nth-child(3)");
+    await clickElement(page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/hall.php");
-    const linkChair = await linkChair.$("body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
-    await linkChair.click();
-    await page.waitForSelector("span");
-    const linkBook = await linkBook.$("body > main > section > button");
-    await linkBook.click();
-    await page.waitForSelector("button");
+    await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
+    await clickElement(page, "body > main > section > button");
+    const actual = await getText(page, "body > main > section > button");
+    await expect(actual).toContain('disabled="true"');
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/payment.php");
-    const titleBook = await page.title();
+    const titleBook = await getText(page, "body > main > section > header > h2");
     expect(titleBook).toEqual("Данное место занято");
-  });
+  }, 60000);
 
 })
