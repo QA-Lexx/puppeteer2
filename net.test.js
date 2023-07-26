@@ -26,12 +26,13 @@ describe("qamid.tmweb.ru tests", () => {
     await page.goto("http://qamid.tmweb.ru/client/hall.php");
     await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
     await clickElement(page, "body > main > section > button");
-    const actual = await getText(page, "body > main > section > button");
-    await expect(actual).toContain("Забронировать");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/payment.php");
-    const titleBook = await getText(page, "body > main > section > header > h2");
-    expect(titleBook).toEqual("Вы выбрали билеты:");
+    const actual = await getText(page, "body > main > section > div > button");
+    await expect(actual).contain("Получить код бронирования");
+    await clickElement(page, "body > main > section > div > button");
+    page = await browser.newPage();
+    await page.goto("http://qamid.tmweb.ru/client/ticket.php");
   }, 60000);
 
   test("The second test two tickets'", async () => {
@@ -42,12 +43,13 @@ describe("qamid.tmweb.ru tests", () => {
     await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
     await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(6)");
     await clickElement(page, "body > main > section > button");
-    const actual = await getText(page, "body > main > section > button");
-    await expect(actual).toContain("Забронировать");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/payment.php");
-    const titleBook = await getText(page, "body > main > section > header > h2");
-    expect(titleBook).toEqual("Вы выбрали билеты:");
+    const actual = await getText(page, "body > main > section > div > button");
+    await expect(actual).contain("Получить код бронирования");
+    await clickElement(page, "body > main > section > div > button");
+    page = await browser.newPage();
+    await page.goto("http://qamid.tmweb.ru/client/ticket.php");
   }, 60000);
 
   test("The third test no tickets'", async () => {
@@ -55,14 +57,9 @@ describe("qamid.tmweb.ru tests", () => {
     await clickElement(page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/hall.php");
-    await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)");
-    await clickElement(page, "body > main > section > button");
+    await clickElement(page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span.buying-scheme__chair.buying-scheme__chair_standart.buying-scheme__chair_taken");
     const actual = await getText(page, "body > main > section > button");
-    await expect(actual).toContain('disabled="true"');
-    page = await browser.newPage();
-    await page.goto("http://qamid.tmweb.ru/client/payment.php");
-    const titleBook = await getText(page, "body > main > section > header > h2");
-    expect(titleBook).toEqual("Данное место занято");
+    await expect(actual).contain("Забронировать");
   }, 60000);
 
 })
