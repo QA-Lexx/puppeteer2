@@ -1,25 +1,28 @@
 const { expect } = require("chai");
 const { clickElement, putText, getText } = require("./lib/commands.js");
 const { generateName } = require("./lib/util.js");
+const {Given, When, Then, Before, After} = require('cucumber');
+const puppeteer = require('puppeteer');
+const expect = require('chai');
 
 let page;
 
-beforeEach(async () => {
+beforeEach.skip(async () => {
   page = await browser.newPage();
   await page.setDefaultNavigationTimeout(0);
 });
 
-afterEach(() => {
+afterEach.skip(() => {
   page.close();
 });
 
-describe("qamid.tmweb.ru tests", () => {
+describe.skip("qamid.tmweb.ru tests", () => {
   beforeEach(async () => {
     page = await browser.newPage();
     await page.goto("http://qamid.tmweb.ru/client/index.php");
   });
 
-  test("The first test one ticket'", async () => {
+  test.skip("The first test one ticket'", async () => {
     await clickElement(page, "body > nav > a:nth-child(3)");
     await clickElement(page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
     page = await browser.newPage();
@@ -35,7 +38,7 @@ describe("qamid.tmweb.ru tests", () => {
     await page.goto("http://qamid.tmweb.ru/client/ticket.php");
   }, 60000);
 
-  test("The second test two tickets'", async () => {
+  test.skip("The second test two tickets'", async () => {
     await clickElement(page, "body > nav > a:nth-child(3)");
     await clickElement(page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
     page = await browser.newPage();
@@ -52,7 +55,7 @@ describe("qamid.tmweb.ru tests", () => {
     await page.goto("http://qamid.tmweb.ru/client/ticket.php");
   }, 60000);
 
-  test("The third test no tickets'", async () => {
+  test.skip("The third test no tickets'", async () => {
     await clickElement(page, "body > nav > a:nth-child(3)");
     await clickElement(page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a");
     page = await browser.newPage();
@@ -63,3 +66,91 @@ describe("qamid.tmweb.ru tests", () => {
   }, 60000);
 
 })
+
+Before(async function () {
+  const browser = await puppeteer.launch({ headless: false, slowMo: 50 });
+  const page = await browser.newPage();
+  this.browser = browser;
+  this.page = page;
+});
+
+After(async function () {
+  if (this.browser) {
+    await this.browser.close();
+  }
+});
+
+Feature: "qamid.tmweb.ru tests"
+
+  Scenario: "The first test one ticket'"
+
+    Given("user is on {string} page", async function (string) {
+      return await this.page.goto(`http://qamid.tmweb.ru/client/index.php${string}`, {setTimeout: 10000});
+    });
+
+    When("user search by {string}", async function (string) {
+      return await clickElement(this.page, "body > nav > a:nth-child(3)", string);
+      return await clickElement(this.page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a", string);
+      this.page = await browser.newPage();
+      return await this.page.goto(`http://qamid.tmweb.ru/client/hall.php${string}`);
+      return await clickElement(this.page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)", string);
+      return await clickElement(this.page, "body > main > section > button", string);
+      this.page = await browser.newPage();
+      return await this.page.goto(`http://qamid.tmweb.ru/client/payment.php${string}`);
+    });
+
+    Then("user sees the course suggested {string}", async function (string) {
+      const actual = await getText(this.page, "body > main > section > div > button");
+      const expected = string.contain("Получить код бронирования");
+      expect(actual).contain(expected);
+      return await clickElement(this.page, "body > main > section > div > button", string);
+      this.page = await browser.newPage();
+      return await this.page.goto(`http://qamid.tmweb.ru/client/ticket.php${string}`);
+    });
+
+  Scenario: "The second test two tickets'"
+
+    Given("user is on {string} page", async function (string) {
+      return await this.page.goto(`http://qamid.tmweb.ru/client/index.php${string}`, {setTimeout: 10000});
+    });
+
+    When("user search by {string}", async function (string) {
+      return await clickElement(this.page, "body > nav > a:nth-child(3)", string);
+      return await clickElement(this.page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a", string);
+      this.page = await browser.newPage();
+      return await this.page.goto(`http://qamid.tmweb.ru/client/hall.php${string}`);
+      return await clickElement(this.page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)", string);
+      return await clickElement(this.page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(6)", string);
+      return await clickElement(this.page, "body > main > section > button", string);
+      this.page = await browser.newPage();
+      return await this.page.goto(`http://qamid.tmweb.ru/client/payment.php${string}`);
+    });
+
+    Then("user sees the course suggested {string}", async function (string) {
+      const actual = await getText(this.page, "body > main > section > div > button");
+      const expected = string.contain("Получить код бронирования");
+      expect(actual).contain(expected);
+      return await clickElement(this.page, "body > main > section > div > button", string);
+      this.page = await browser.newPage();
+      return await this.page.goto(`http://qamid.tmweb.ru/client/ticket.php${string}`);
+    });
+
+  Scenario: "The first test one ticket'"
+
+    Given("user is on {string} page", async function (string) {
+      return await this.page.goto(`http://qamid.tmweb.ru/client/index.php${string}`, {setTimeout: 10000});
+    });
+
+    When("user search by {string}", async function (string) {
+      return await clickElement(this.page, "body > nav > a:nth-child(3)", string);
+      return await clickElement(this.page, "body > main > section:nth-child(3) > div:nth-child(2) > ul > li > a", string);
+      this.page = await browser.newPage();
+      return await this.page.goto(`http://qamid.tmweb.ru/client/hall.php${string}`);
+      return await clickElement(this.page, "body > main > section > div.buying-scheme > div.buying-scheme__wrapper > div:nth-child(10) > span:nth-child(5)", string);
+    });
+
+    Then("user sees the course suggested {string}", async function (string) {
+      const actual = await getText(this.page, "body > main > section > button");
+      const expected = string.contain("Забронировать");
+      expect(actual).contain(expected);
+    });
